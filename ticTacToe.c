@@ -127,6 +127,45 @@ void human_vs_computer(char * h, int lev)
         introduction();
         printf("\n##**HUMAN vs. COMPUTER\n\n");
         board();
+
+          int pl; // local variable 
+        char *name; // pointer variable 
+        
+        // changes player after each go - so they take it in turns to have a go 
+        if( i % 2 == 0 ) // (9 loops) 0 - 8 % 2 = 0, 1, 0, 1, 0, 1, 0, 1, 0 // only enters if its equal to 0 
+        {
+            // ONLY if answer is 0 do this: MUST BE 0
+            pl = p; // 'pl' holds the value of 'p' // p value is always 1 or 2 depending on who you choose whose turn is first above 
+            printf("value of pl in IF the turns = %d \n", pl);
+            delay(5.5);
+
+        } 
+        else
+        {
+            // any answer APART FROM 0 do this: MUST NOT BE 0 
+            pl=3-p; 
+            printf("value of pl in ELSE the turns = %d \n", pl);
+            delay(5.5);
+
+        } 
+
+        // The results from the above if and else dictate this below if and else 
+        if(pl==1) 
+        {
+            // name of player
+            name=h; // *h is a pointer variable - holds the characters of players name and puts it into *name pointer (pointer to pointer)
+        } 
+        else
+        {
+            // name of computer 
+            name="Computer"; // changing value wihin pointer variable 
+        } 
+        
+        // prints out results 
+        printf("## Player-%d: %s\n", pl, name);
+        delay(5.35);
+
+        i++; 
     } 
 }
 
