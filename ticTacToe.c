@@ -126,7 +126,35 @@ void human_vs_computer(char * h, int lev)
         // screen is cleared and shows what is below here 
         introduction();
         printf("\n##**HUMAN vs. COMPUTER\n\n");
+        board();
     } 
+}
+
+// the interface of the game 
+void board()
+{
+    int i, j; // local variables 
+    printf("\n\n");
+    // loops 3 times - in order to display 9 spaces 
+    for(i=0; i<3; i++)
+    {
+        // if there is an 'i' do this:
+        if(i)
+        {
+            // shows the tic tac toe table by using characters from the ASCII SCHEME 
+            printf("\n  %c%c%c%c%c%c", 196,196,196,197,196,196);
+            printf("%c%c%c%c%c\n", 196,197,196,196,196);
+        }
+        printf("  "); // provides spacing between characters - to make interface look good
+        // loops 3 ties to input numbers 1 - 9 in the spaces 
+        for(j=0;j<3;j++)
+        {
+            printf(" %c ", move[i][j]); // displays the characters (1-9) in the spaces of the table above 
+            if(j!=2) printf("%c", 179); // keeps the table characer inline for interface when char are added from move array 
+        }
+    }
+    // creates space under the game table 
+    printf("\n\n");
 }
 
 //Functions 
