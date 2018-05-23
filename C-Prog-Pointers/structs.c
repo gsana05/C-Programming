@@ -8,7 +8,7 @@
 // struct - is a block data type in memory: used to group a bunch of variables which can be different types 
 // all the variables/members of the struct can be accessed via single pointer 
 // no memory is allocated so no harm on using it globally - usually put struct in different header file 
-struct basalMetabolicRate
+typedef struct basalMetabolicRate
 {
     char* name;
     char* gender;
@@ -16,18 +16,18 @@ struct basalMetabolicRate
     float weight;
     float height;
     float bmrTotal;
-};
+}bmr;
 
 // function declarations 
-void userInput(struct basalMetabolicRate *i); // passing struct as pointer
-void results(struct basalMetabolicRate *i); // passing struct as pointer
+void userInput(bmr *i); // passing struct as pointer
+void results(bmr *i); // passing struct as pointer
 void introduction();
 void delay(float timeDelay);
 
 int main()
 {
-    struct basalMetabolicRate calorieCounter; // naming the struct calorieCounter to be accessed in this function
-    struct basalMetabolicRate *pCalorieCounter, *pGenderChoice; // setting pointer variables to struct
+    bmr calorieCounter; // naming the struct calorieCounter to be accessed in this function
+    bmr *pCalorieCounter, *pGenderChoice; // setting pointer variables to struct
     pCalorieCounter = &calorieCounter; // assigning pointer variables 
     pGenderChoice = &calorieCounter;  // assigning pointer varaible 
 
@@ -75,7 +75,7 @@ int main()
 Gets user input: name, gender, age, height and weight. 
 Checks if user input is valid
 */
-void userInput(struct basalMetabolicRate *i) // takes in pointer variable 
+void userInput(bmr *i) // takes in pointer variable 
 {
     printf("Please enter your name \n");
     gets(i->name);
@@ -122,7 +122,7 @@ void userInput(struct basalMetabolicRate *i) // takes in pointer variable
         fgets(userHeight, 63, stdin);
         if(sscanf(userHeight, "%f", &i->height) != 1)
         {
-            printf("invalid input nigga \n");
+            printf("invalid input \n");
             continue;
         }
         printf("Number OK: %.2f \n", i->height); 
@@ -146,7 +146,7 @@ void userInput(struct basalMetabolicRate *i) // takes in pointer variable
 }
 
 // uses the input from "userInput" and calculates an output for BMR 
-void results(struct basalMetabolicRate *i)
+void results(bmr *i)
 {
     printf("\n");
     printf(" \t Name = %s \n", i->name);
