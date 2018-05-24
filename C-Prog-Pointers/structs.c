@@ -18,11 +18,21 @@ typedef struct basalMetabolicRate
     float bmrTotal;
 }bmr;
 
+// struct to implement compound literals
+typedef struct compoundLiteral
+{
+    int caloriesBurnt;
+    int eatenCalories;
+    int bmrSum;
+}calories_in_and_out; 
+
 // function declarations 
 void userInput(bmr *i); // passing struct as pointer
-void results(bmr *i); // passing struct as pointer
+void results(bmr *i, int* bmrSum); // passing struct as pointer // float* brmSum - returns value to main
 void introduction();
 void delay(float timeDelay);
+void calorie_calculation_hardcode(calories_in_and_out health); // Compound literal function HARDCODE
+void calorie_calculation_userinput(calories_in_and_out health_userinput); // Compound literal function USERINPUT
 
 int main()
 {
@@ -32,7 +42,7 @@ int main()
     pGenderChoice = &calorieCounter;  // assigning pointer varaible 
 
     // creating dynamic memory for name 
-    pCalorieCounter -> name = (char*) malloc(30* sizeof(char));
+    pCalorieCounter -> name = (char*) malloc(30* sizeof(char)); // -> dereferencing a member in struct with a pointer
     if(pCalorieCounter == NULL)
     {
         printf("memory NOT allocated \n");
@@ -57,12 +67,20 @@ int main()
     
     introduction(); // calling function
 
+    calorie_calculation_hardcode((calories_in_and_out){200, 400}); // calling Compound literal function
+
     userInput(pCalorieCounter); // calling function and passing pointer varaible 
     
     delay(1.5); // calling function
+    
+    int bmrSum; // getting the brm total so it can be accesses in main function
+    results(pCalorieCounter, &bmrSum); // calling function and passing pointer varaible 
+    printf("brmSum from main = %d \n", bmrSum); // getting the brm total so it can be accesses in main function
 
-    results(pCalorieCounter); // calling function and passing pointer varaible 
-
+    int caloriesBurnt; // variable for compound literal
+    int caloriesEaten; // variable for compound literal
+    calorie_calculation_userinput((calories_in_and_out){caloriesEaten, caloriesBurnt, bmrSum}); // calling Compound literal function
+    
     free(pCalorieCounter->name); // free the memory so it can be used by other software
     pCalorieCounter->name = NULL; // making sure its free
 
@@ -99,6 +117,7 @@ void userInput(bmr *i) // takes in pointer variable
     }
     
     char userAge[64]; // local variable 
+    //(*i).age = 0; - this is how it would be dereferenced without "->"
     i->age = 0; // assigning varaible 
     while(i->age == 0) // keep looping until this is not true 
     {
@@ -146,7 +165,7 @@ void userInput(bmr *i) // takes in pointer variable
 }
 
 // uses the input from "userInput" and calculates an output for BMR 
-void results(bmr *i)
+void results(bmr *i, int* bmrSum) // float* brmSum - returns value to main function 
 {
     printf("\n");
     printf(" \t Name = %s \n", i->name);
@@ -173,6 +192,8 @@ void results(bmr *i)
     }
     
     printf(" \t your bmr is = %.2f \n", ceil(i->bmrTotal)); // prints BMR RESULT 
+    *bmrSum = ceil(i->bmrTotal); // putting bmrTotal in brmSum so main function has access 
+
 
 }
 
@@ -198,4 +219,48 @@ void delay(float timeDelay)
     while((clock()-start) < (timeDelay*1000));
 
     return; 
+}
+
+/* HARDCODE FOR COMPOUND LITERAL - CALORIES EATEN AND BURNT */
+void calorie_calculation_hardcode(calories_in_and_out health) // Compound literal function // taking in struct and assiging a name 
+{
+    printf("COMPOUND LITERAL: calories eaten = %d --- calories burnt = %d \n",
+    health.eatenCalories, health.caloriesBurnt);
+}
+
+/* USERINPUT FOR COMPOUND LITERAL - CALORIES EATEN AND BURNT */
+void calorie_calculation_userinput(calories_in_and_out health_userinput) // Compound literal function // taking in struct and assiging a name 
+{
+    printf("\n");
+    printf("please enter the number of calories eaten today \n");
+    scanf("%d", &health_userinput.eatenCalories);
+
+    printf("please enter the number of calories burnt from exercise today \n");
+    scanf("%d", &health_userinput.caloriesBurnt); 
+
+    printf("COMPOUND LITERAL: BMR = %d --- calories burnt = %d --- calories eaten = %d \n",
+    health_userinput.bmrSum, health_userinput.caloriesBurnt, health_userinput.eatenCalories);
+    
+    int caloriesBurnt; // local variables
+    int calorieCount; // local variables 
+    caloriesBurnt = health_userinput.bmrSum + health_userinput.caloriesBurnt;
+    printf("calorie burnt for today (bmr + activity) = %d \n", caloriesBurnt);
+    printf("calories eaten today = %d \n", health_userinput.eatenCalories);
+
+    calorieCount = health_userinput.bmrSum + health_userinput.caloriesBurnt - health_userinput.eatenCalories;
+    printf("calorie count (calories burnt - calories eaten) = %d \n", calorieCount);
+    
+    // calculating if you are in deficit, surplus or breakeven
+    if((calorieCount > 1)) // deficit
+    {
+        printf("you are in a caloric deficit of = %d \n", calorieCount);
+    }
+    else if ((calorieCount < 0)) // surplus
+    {
+        printf(" you are in a caloric surplus of = %d \n", abs(calorieCount)); // abs stop it being a minus number
+    }
+    else
+    {
+        printf("you are at break even with = %d calories to spare \n", calorieCount);
+    }
 }
