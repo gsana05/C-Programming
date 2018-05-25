@@ -16,6 +16,7 @@ typedef struct basalMetabolicRate
     float weight;
     float height;
     float bmrTotal;
+    FILE* filePointer; 
 }bmr;
 
 // struct to implement compound literals
@@ -33,6 +34,7 @@ void introduction();
 void delay(float timeDelay);
 void calorie_calculation_hardcode(calories_in_and_out health); // Compound literal function HARDCODE
 void calorie_calculation_userinput(calories_in_and_out health_userinput); // Compound literal function USERINPUT
+void fileCreator(bmr* i);
 
 int main()
 {
@@ -68,6 +70,8 @@ int main()
     
     introduction(); // calling function
 
+    fileCreator(pCalorieCounter);
+
     calorie_calculation_hardcode((calories_in_and_out){200, 400}); // calling Compound literal function
 
     userInput(pCalorieCounter); // calling function and passing pointer varaible 
@@ -80,7 +84,7 @@ int main()
 
     int caloriesBurnt; // variable for compound literal
     int caloriesEaten; // variable for compound literal
-    calorie_calculation_userinput((calories_in_and_out){caloriesEaten, caloriesBurnt, bmrSum }); // calling Compound literal function
+    calorie_calculation_userinput( (calories_in_and_out){caloriesEaten, caloriesBurnt, bmrSum } ); // calling Compound literal function
 
     free(pCalorieCounter->name); // free the memory so it can be used by other software
     pCalorieCounter->name = NULL; // making sure its free
@@ -168,30 +172,21 @@ void userInput(bmr *i) // takes in pointer variable
 // uses the input from "userInput" and calculates an output for BMR 
 void results(bmr *i, int* bmrSum) // float* brmSum - returns value to main function 
 {
-    
-    FILE *fptr; // creating a file pointer to save data to txt file 
-    fptr = fopen("structResults.txt", "w"); // name of file and "w" writting input in
-    if (fptr == NULL) 
-    {
-        printf("File does not exists \n");
-        return;
-    } 
-
     printf("\n");
     printf(" \t Name = %s \n", i->name); // print to CMD 
-    fprintf(fptr, "Name    = %s\n", i->name); // printing to non-volatile file
+    fprintf(i->filePointer, "Name    = %s\n", i->name); // printing to non-volatile file
 
     printf(" \t Age = %.2f \n", i->age); // print to CMD 
-    fprintf(fptr, "age    = %.2f\n", i->age); // printing to non-volatile file
+    fprintf(i->filePointer, "age    = %.2f\n", i->age); // printing to non-volatile file
 
     printf(" \t Height = %.2f \n", i->height); // print to CMD 
-    fprintf(fptr, "height   = %.2f \n", i->height); // printing to non-volatile file
+    fprintf(i->filePointer, "height   = %.2f \n", i->height); // printing to non-volatile file
 
     printf(" \t Weigtht = %.2f \n", i->weight); // print to CMD 
-    fprintf(fptr, "weight   = %.2f \n", i->weight); // printing to non-volatile file
+    fprintf(i->filePointer, "weight   = %.2f \n", i->weight); // printing to non-volatile file
 
     printf(" \t Gender = %s \n", i->gender); // print to CMD 
-    fprintf(fptr, "Gender = %s \n", i->gender); // printing to non-volatile file
+    fprintf(i->filePointer, "Gender = %s \n", i->gender); // printing to non-volatile file
 
       if(strcmp(i->gender, "m") == 0) // if user is male do this 
     {
@@ -212,7 +207,7 @@ void results(bmr *i, int* bmrSum) // float* brmSum - returns value to main funct
     
     printf(" \t your bmr is = %.2f \n", ceil(i->bmrTotal)); // prints BMR RESULT 
     *bmrSum = ceil(i->bmrTotal); // putting bmrTotal in brmSum so main function has access 
-    fprintf(fptr, "Your BMR = %.2f \n", ceil(i->bmrTotal)); // printing to non-volatile file
+    fprintf(i->filePointer, "Your BMR = %.2f \n", ceil(i->bmrTotal)); // printing to non-volatile file
 
 }
 
@@ -283,4 +278,16 @@ void calorie_calculation_userinput(calories_in_and_out health_userinput) // Comp
     {
         printf("you are at break even with = %d calories to spare \n", calorieCount);
     }
+}
+
+/* CREATING A FILE NON-VOLATILE DATA*/
+void fileCreator(bmr* i)
+{
+    i->filePointer = fopen("trials.txt", "w"); // name of file and "w" writting input in
+    if (i->filePointer == NULL) 
+    {
+        printf("File does not exists \n");
+        return;
+    }
+    fprintf(i->filePointer,"Welcome to non-volatile data file \n");
 }
