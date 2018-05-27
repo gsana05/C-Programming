@@ -1,5 +1,0 @@
-Welcome to non-volatile data file 
-age = 123 
-weight = 90.50 
-favourite team = spurs
- 
