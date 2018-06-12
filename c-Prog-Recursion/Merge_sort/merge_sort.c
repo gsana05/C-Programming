@@ -1,4 +1,7 @@
-/* C program for Merge Sort */
+/* C program for Merge Sort 
+- divide and conquer approach
+- uses more memory on the stack than quick sort as it creates temporary arrays 
+*/
 #include<stdlib.h>
 #include<stdio.h>
 #include<time.h>
@@ -6,8 +9,8 @@
 #include<conio.h>
 
 // function declarations 
-void splitting(int* userInput, int size); // divide
-void mergeSort(int* userInput, int* L, int* R, int size); // conquer
+int splitting(int* userInput, int size); // divide
+int mergeSort(int* userInput, int* L, int* R, int size); // conquer
 
 int main()
 {
@@ -57,7 +60,7 @@ int main()
 
     input = (int*)malloc(howMany*sizeof(int)); // dynamic memory allocation
 
-    arraySize = sizeof(input)*howMany / sizeof(int); // show the amount of elemnts in the array 
+    arraySize = sizeof(input)*howMany / sizeof(int); // show the amount of elements in the array 
     if(input == NULL) // check if dynamic memory has been allocated 
     {
         printf("memory has not been allocated \n");
@@ -130,7 +133,7 @@ int main()
 
     printf("\n \n \n");
 
-    splitting(input, arraySize); // calling function
+    int inversion = splitting(input, arraySize); // calling function
     
     // Showing sorted array 
     printf("\n \n \n");
@@ -148,13 +151,14 @@ int main()
         
         printf("BINARY SORTED input[%d] = %d \n", i, input[i]); 
     }
-
-
+    printf("The number of inversions = %d \n", inversion);
 }
+/* end of main */
 
 /* dividing elements in the array */
-void splitting(int* userInput, int size)
+int splitting(int* userInput, int size)
 {
+    int x, y, z;
     int* L;
     int* R;
     int i = 0;
@@ -167,7 +171,7 @@ void splitting(int* userInput, int size)
     if(size < 2) // BASE CASE to end recursion - single array elements, its time to start merging
     {
         printf("return - only 1 element in array \n");
-        return;
+        return 0;
     }
     else
     {
@@ -191,23 +195,24 @@ void splitting(int* userInput, int size)
         
         printf("\n \n");
         printf("LEFT ARRAY \n");
-        splitting(L, mid);
+        x = splitting(L, mid);
 
         printf("\n \n");
         printf("RIGHT ARRAY \n");
-        splitting(R, size - mid);
+        y = splitting(R, size - mid);
         
         printf("\n \n");
         printf("MERGE SORT \n");
-        mergeSort(userInput, L, R, size);
-
+        z = mergeSort(userInput, L, R, size);
+        
+        return x+y+z;
 
     }
     
 }
 
 // merging arrays in ascending order 
-void mergeSort(int* userInput, int* L, int* R, int size)
+int mergeSort(int* userInput, int* L, int* R, int size)
 {
     printf("WELCOME TO MERGE SORT \n");
 
